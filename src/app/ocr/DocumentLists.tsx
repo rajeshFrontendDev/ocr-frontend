@@ -1,13 +1,13 @@
 "use client"
-import { fetchApi } from '@/customHooks/fetchApi'
+import { usefetchData } from '@/customHooks/usefetchData'
 import { DownloadCard } from '@/components/DownloadCard';
 
 
 const documentsListAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/documents/`
 const downloadExcelAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/download-excel/`
 
-export const DocumentsList = () => {
-    const { data, isLoading, error }: any = fetchApi(documentsListAPIURL, "GET")
+const DocumentsList = () => {
+    const { data, isLoading, error }: any = usefetchData(documentsListAPIURL, "GET")
     const documentsData = data?.data.groups
 
     const handleExcelDownload = async (group_id: number) => {
@@ -38,7 +38,6 @@ export const DocumentsList = () => {
         window.URL.revokeObjectURL(url);
     }
 
-
     return (
         <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-8'>
             {
@@ -49,3 +48,5 @@ export const DocumentsList = () => {
         </div>
     )
 }
+
+export default DocumentsList

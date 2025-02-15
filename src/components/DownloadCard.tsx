@@ -1,4 +1,4 @@
-import { CloudDownload, EyeOff } from 'lucide-react';
+import { CloudDownload, EyeOff, Trash2 } from 'lucide-react';
 import { format } from "date-fns";
 
 type propsType = {
@@ -18,8 +18,9 @@ export const DownloadCard = ({ document, handleExcelDownload }: propsType) => {
             <div className='flex justify-center gap-8 mt-2'>
                 <CloudDownload className='hover:text-sky-600' onClick={() => handleExcelDownload(document.result_group_id)} />
                 <EyeOff className='hover:text-sky-600' />
+                <Trash2 />
             </div>
-            <p>{format(new Date(document.tests[0]?.created_at), 'dd-MMM-yyyy')}</p>
+            <p>{format(new Date(document.tests[0]?.created_at), 'dd-MMM-yyyy, HH:MM')}</p>
         </button>
     )
 }
