@@ -15,25 +15,20 @@ const UploadDocument = () => {
         else {
             setFileName(e?.target?.files[0].name)
             formData.append('file', e?.target?.files[0])
+            const res = await handleSubmit(ExtractTextAPIURL, formData)
+            console.log('res', res)
         }
-    }
-
-    const handleImageSubmit = async (e: any) => {
-        e.preventDefault()
-        const res = await handleSubmit(ExtractTextAPIURL, formData)
-        console.log('res', res)
     }
 
     return (
         <section className="flex flex-col justify-center items-center">
             <p>Upload your image</p>
-            <form action="" onSubmit={handleImageSubmit}>
+            <form action="" >
                 <div className="custom-file-input rounded-lg p-4 bg-sky-400 shadow-md shadow-stone-100">
                     <input type="file" onChange={handleFileUpload} />
                     <CloudUpload className="abosolute top-0 left-0" />
                     <span>{fileName ? fileName : 'No file choosen'}</span>
                 </div>
-                <button type="submit" >Submit</button>
             </form>
         </section>
     )

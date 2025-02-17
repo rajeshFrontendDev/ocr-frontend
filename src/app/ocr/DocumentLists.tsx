@@ -1,12 +1,14 @@
 "use client"
+import { useRouter } from 'next/navigation';
 import { usefetchData } from '@/customHooks/usefetchData'
 import { DownloadCard } from '@/components/DownloadCard';
-
 
 const documentsListAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/documents/`
 const downloadExcelAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/download-excel/`
 
 const DocumentsList = () => {
+    const router = useRouter()
+
     const { data, isLoading, error }: any = usefetchData(documentsListAPIURL, "GET")
     const documentsData = data?.data.groups
 
@@ -38,11 +40,22 @@ const DocumentsList = () => {
         window.URL.revokeObjectURL(url);
     }
 
+    const handleNavigate = (documentData: any) => {
+        console.log(documentData.tests[0], 'data')
+        const stringData = JSON.stringify(encodeURIComponent(documentData.tests))
+        router.push(`/documentview?data=${stringData}`)
+    }
+
     return (
         <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-8'>
             {
                 documentsData && documentsData.map((document: any, i: number) => (
-                    <DownloadCard key={document.result_group_id} document={document} handleExcelDownload={handleExcelDownload} />
+                    <DownloadCard
+                        key={document.result_group_id}
+                        document={document}
+                        handleNavigate={handleNavigate}
+                        handleExcelDownload={handleExcelDownload}
+                    />
                 ))
             }
         </div>

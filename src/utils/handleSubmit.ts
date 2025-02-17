@@ -10,6 +10,7 @@ export const handleSubmit = async (url: string, data: any) => {
     if (!res.ok) {
         console.log('not ok')
     }
-    const resJson = res.json()
+
+    const resJson = await res.json()
     return resJson
 }
