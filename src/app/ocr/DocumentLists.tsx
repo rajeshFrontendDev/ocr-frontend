@@ -1,14 +1,18 @@
 "use client"
 import { useRouter } from 'next/navigation';
 import { usefetchData } from '@/customHooks/usefetchData'
-import { DocumentCard } from '@/components/DocumentCard';
 import { handleSubmit } from '@/utils/handleSubmit';
+import { DocumentCard } from '@/components/DocumentCard';
+import React from 'react';
+import { DeleteAlert } from '@/components/DeleteAlert';
 
 const documentsListAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/documents/`
 const downloadExcelAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/download-excel/`
 const deleteDocumentAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/documents/`
 
 const DocumentsList = () => {
+    const [isDelete, setIsDelete] = React.useState(false)
+    const [groupId, setGroupId] = React.useState<number | null>(null)
     const router = useRouter()
 
     const { data, isLoading, error }: any = usefetchData(documentsListAPIURL, "GET")
@@ -42,8 +46,8 @@ const DocumentsList = () => {
         window.URL.revokeObjectURL(url);
     }
 
-    const handleDelete = async (group_id: number) => {
-        const deleteurl = `${deleteDocumentAPIURL}${group_id}/`
+    const handleDelete = async () => {
+        const deleteurl = `${deleteDocumentAPIURL}${groupId}/`
         const { data, loading, err }: any = handleSubmit(deleteurl, {}, 'delete')
         console.log('data', data)
         console.log('loading', loading)
@@ -57,6 +61,12 @@ const DocumentsList = () => {
         router.push(`/documentview`)
     }
 
+    const buttonConfig = {
+        handleNavigate: handleNavigate,
+        handleDownload: handleExcelDownload,
+        setGroupId: (value: number) => { setGroupId(value); setIsDelete(true) }
+    }
+
     return (
         <div className='grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-4 mt-8'>
             {
@@ -64,12 +74,11 @@ const DocumentsList = () => {
                     <DocumentCard
                         key={document.result_group_id}
                         document={document}
-                        handleNavigate={handleNavigate}
-                        handleExcelDownload={handleExcelDownload}
-                        handleDelete={handleDelete}
+                        buttonConfig={buttonConfig}
                     />
                 ))
             }
+            {isDelete && <DeleteAlert closeHandler={() => setIsDelete(false)} deleteHandler={handleDelete} />}
         </div>
     )
 }
