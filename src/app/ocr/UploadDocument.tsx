@@ -7,6 +7,8 @@ const ExtractTextAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/extract-tex
 
 const UploadDocument = () => {
     const [fileName, setFileName] = React.useState<string | null>(null)
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [message, setMessage] = React.useState<string | null>(null)
 
     const formData = new FormData()
 
@@ -15,8 +17,13 @@ const UploadDocument = () => {
         else {
             setFileName(e?.target?.files[0].name)
             formData.append('file', e?.target?.files[0])
-            const { data, loading, err } = await handleSubmit(ExtractTextAPIURL, formData, 'POST')
-            console.log('res', data)
+            setIsLoading(true)
+            const { data, err } = await handleSubmit(ExtractTextAPIURL, formData, 'POST')
+            console.log(err)
+            if (data) {
+                setMessage('Extracted')
+                setIsLoading(false)
+            }
         }
     }
 
@@ -30,6 +37,9 @@ const UploadDocument = () => {
                     <span>{fileName ? fileName : 'No file choosen'}</span>
                 </div>
             </form>
+            <div>
+                {isLoading ? <p className="text-xl font-semibold">Extracting...</p> : <p className="text-xl font-semibold">{message}</p>}
+            </div>
         </section>
     )
 }
