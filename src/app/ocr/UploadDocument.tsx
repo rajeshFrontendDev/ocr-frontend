@@ -15,8 +15,8 @@ const UploadDocument = () => {
         else {
             setFileName(e?.target?.files[0].name)
             formData.append('file', e?.target?.files[0])
-            const res = await handleSubmit(ExtractTextAPIURL, formData)
-            console.log('res', res)
+            const { data, loading, err } = await handleSubmit(ExtractTextAPIURL, formData, 'POST')
+            console.log('res', data)
         }
     }
 

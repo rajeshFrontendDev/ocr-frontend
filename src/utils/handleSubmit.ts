@@ -1,16 +1,28 @@
 
-export const handleSubmit = async (url: string, data: any) => {
-    const res = await fetch(url, {
-        method: "POST",
-        headers: {
-        },
-        body: data
-    })
+export const handleSubmit = async (url: string, payload: any, method: string) => {
+    let err;
+    let data;
+    let loading = true
+    try {
+        const res = await fetch(url, {
+            method: method,
+            headers: {
+            },
+            body: payload
+        })
 
-    if (!res.ok) {
-        console.log('not ok')
+        if (!res.ok) {
+            console.log('not ok')
+        }
+
+        const resJson = await res.json()
+        if (resJson.status === 200) {
+            loading = false
+            data = resJson.data
+        }
+    } catch (error) {
+        err = error
     }
 
-    const resJson = await res.json()
-    return resJson
+    return { data, loading, err }
 }
