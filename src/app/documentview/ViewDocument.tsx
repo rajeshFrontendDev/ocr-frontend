@@ -12,7 +12,7 @@ const ViewDocument = () => {
 
     return (
         // document view section
-        <section className='w-full h-full text-white'>
+        <section className='w-full h-full text-black'>
             <div></div>
             {
                 documentData && documentData.map((data: any) => (

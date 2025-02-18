@@ -1,6 +1,6 @@
 import React from "react";
 
-export const usefetchData = (url: string, method: string) => {
+export const usefetchData = (url: string, method: string, renderer: number) => {
     const [data, setData] = React.useState(null)
     const [isLoading, setIsLoading] = React.useState(false)
     const [error, setError] = React.useState<unknown>(null)
@@ -24,9 +24,8 @@ export const usefetchData = (url: string, method: string) => {
                 setIsLoading(false)
             }
         }
-
         callApi()
-    }, [])
+    }, [renderer])
 
     return { data, isLoading, error }
 }

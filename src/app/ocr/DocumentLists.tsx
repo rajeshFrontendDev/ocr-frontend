@@ -8,17 +8,22 @@ import { DeleteAlert } from '@/components/DeleteAlert';
 
 const documentsListAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/documents/`
 const downloadExcelAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/download-excel/`
-const deleteDocumentAPIURL = `${process.env.NEXT_PUBLIC_API_URL}ocr/api/documents/`
 
-const DocumentsList = () => {
+interface PropsType {
+    handelTriggerer: () => void;
+    renderer: number
+}
+
+const DocumentsList = ({ handelTriggerer, renderer }: PropsType) => {
     const [isDelete, setIsDelete] = React.useState(false)
     const [groupId, setGroupId] = React.useState<number | null>(null)
     const router = useRouter()
 
-    const { data, isLoading, error }: any = usefetchData(documentsListAPIURL, "GET")
+    const { data, isLoading, error }: any = usefetchData(documentsListAPIURL, "GET", renderer)
     const documentsData = data?.data.groups
 
     const handleExcelDownload = async (group_id: number) => {
+        console.log('calling12')
         const res = await fetch(downloadExcelAPIURL, {
             method: "POST",
             headers: {
@@ -47,14 +52,15 @@ const DocumentsList = () => {
     }
 
     const handleDelete = async () => {
-        const deleteurl = `${deleteDocumentAPIURL}${groupId}/`
-        const { data, loading, err }: any = handleSubmit(deleteurl, {}, 'delete')
-        console.log('data', data)
-        console.log('loading', loading)
-        console.log('err', err)
+        const deleteurl = `${documentsListAPIURL}${groupId}/`
+        const { data, loading, err }: any = await handleSubmit(deleteurl, {}, 'delete')
+        setIsDelete(false)
+        handelTriggerer()
+        console.log('calling1')
     }
 
     const handleNavigate = (documentData: any) => {
+        console.log('calling2')
         console.log(documentData.tests[0], 'data')
         const stringData = btoa(JSON.stringify(documentData.tests))
         localStorage.setItem('stringData', stringData)
