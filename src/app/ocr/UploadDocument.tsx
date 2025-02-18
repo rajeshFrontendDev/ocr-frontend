@@ -37,11 +37,11 @@ const UploadDocument = ({ handelTriggerer }: PropsType) => {
     return (
         <section className="flex flex-col justify-center items-center">
             <h1 className="text-black text-xl">Upload your image</h1>
-            <form action="" className="flex w-[300px] h-[200px] mt-4 justify-center items-center rounded-lg p-4 bg-sky-400 shadow-md shadow-stone-100">
-                <div className="custom-file-input ">
-                    <input className="" type="file" onChange={handleFileUpload} />
-                    <CloudUpload className="abosolute top-0 left-0" />
-                    <span>{fileName ? fileName : 'No file choosen'}</span>
+            <form action="" className="flex mt-4 justify-center items-center rounded-lg p-4 bg-sky-400 shadow-md shadow-stone-100">
+                <div className="custom-file-input w-[300px] h-[200px]">
+                    <input className="h-[150px] w-[280px]" type="file" onChange={handleFileUpload} />
+                    <CloudUpload className="absolute pointer-events-none top-0 left-0 h-[150px] w-[280px]" />
+                    <p className="text-center">{fileName ? fileName : 'No file choosen'}</p>
                 </div>
             </form>
             <div>

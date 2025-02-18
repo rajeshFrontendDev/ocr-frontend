@@ -31,7 +31,7 @@ body {
 }
 
 .custom-file-input input[type="file"] {
-  position: absolute;
+  /* position: absolute; */
   opacity: 0;
   cursor: pointer;
 }
